@@ -5,10 +5,14 @@
  */
 package com.training.tdi.jdbc;
 
+import com.training.tdi.jdbc.dao.DepartmentDao;
+import com.training.tdi.jdbc.entity.Department;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 import java.util.Locale;
 import javax.sql.DataSource;
 import org.apache.commons.dbcp2.BasicDataSource;
@@ -30,27 +34,56 @@ public class AplikasiUtama {
             // membuka koneksi ke database
             Connection connection = ds.getConnection();
             System.out.println("berhasil koneksi ke database");
+            DepartmentDao dao = new DepartmentDao(connection);
+//            dao.save(new Department(2001,"Sistem Analis",1000,null));
             
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("select * from departments");
+            
+//            String sqlInsert ="insert into departments (department_id,department_name,location_id) values (?, ?, ?)";
+//            PreparedStatement preparedStatement = connection.prepareStatement(sqlInsert);
+//            preparedStatement.setInt(1, 1006);
+//            preparedStatement.setString(2, "Publisher");
+//            preparedStatement.setInt(3, 1000);
+//            preparedStatement.executeUpdate();
+
+//            preparedStatement.close();
+            
+//            Statement statement = connection.createStatement();
+//            ResultSet resultSet = statement.executeQuery("select * from departments");
             
             // untuk mengambil data perbaris
-            while(resultSet.next()){
-                Integer departmentId = resultSet.getInt("department_id");
-                String departmentName = resultSet.getString("department_name");
-                Integer managerId = resultSet.getInt(3);
-                
-                System.out.println(String.format("{departemntId : %s, deparetmentName :%s, managerId :%s }",
-                        departmentId,departmentName,managerId));
-                
-            }
+//            while(resultSet.next()){ // DARI CLASS DEPARTEMENT
+//                Department dep = new Department(
+//                    resultSet.getInt("department_id"),
+//                    resultSet.getString("department_name"),
+//                    resultSet.getInt(3),
+//                    resultSet.getInt(4)
+//                    );
+////                Integer departmentId = resultSet.getInt("department_id");
+////                String departmentName = resultSet.getString("department_name");
+////                Integer managerId = resultSet.getInt(3);
+////                
+////                System.out.println(String.format("{departemntId : %s, deparetmentName :%s, managerId :%s }",
+////                        departmentId,departmentName,managerId));
+//                System.out.println(dep.toString());
+//            }
+
+            // save nilai department
+            dao.save(new Department(2002, "Sistem Analis",1000,null));
             
+            //untuk ambil nilainya
+            List<Department> daftarDepartment = dao.findAll();
+            for(Department d : daftarDepartment){
+                System.out.println(d.toString());
+            }
+//            
             // menutup koneksi ke database
-            resultSet.close();
-            statement.close();
+//            resultSet.close();
+//            statement.close();
+
             connection.close();
         }catch (SQLException sqle){
             System.err.println("tidak dapat koneksi ke database");
+            sqle.printStackTrace();
         }
     }
     
