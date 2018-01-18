@@ -5,7 +5,6 @@
  */
 package com.training.tdi.jdbc;
 
-
 import com.training.tdi.jdbc.dao.DepartmentDao;
 import com.training.tdi.jdbc.entity.Department;
 import java.sql.Connection;
@@ -19,43 +18,38 @@ import java.util.logging.Level;
 import javax.sql.DataSource;
 import org.apache.commons.dbcp2.BasicDataSource;
 
-
 /**
  *
  * @author nabila farapasyet
  */
 public class AplikasiUtama {
-   
-    public static void koneksi(){
-        BasicDataSource ds =new BasicDataSource(); 
+
+    public static void koneksi() {
+        BasicDataSource ds = new BasicDataSource();
         ds.setUsername("hr");
         ds.setPassword("hr");
         ds.setUrl("jdbc:postgresql://localhost:5432/hr");
         ds.setDriverClassName("org.postgresql.Driver");
         Connection connection = null;
-        
-        try{
+
+        try {
             // membuka koneksi ke database
 //            Connection connection = ds.getConnection();
             connection = ds.getConnection();
             connection.setAutoCommit(false);
             System.out.println("berhasil koneksi ke database");
             DepartmentDao dao = new DepartmentDao(connection);
-//            dao.save(new Department(2001,"Sistem Analis",1000,null));
-            
-            
+//          dao.save(new Department(2001,"Sistem Analis",1000,null));
+
 //            String sqlInsert ="insert into departments (department_id,department_name,location_id) values (?, ?, ?)";
 //            PreparedStatement preparedStatement = connection.prepareStatement(sqlInsert);
 //            preparedStatement.setInt(1, 1006);
 //            preparedStatement.setString(2, "Publisher");
 //            preparedStatement.setInt(3, 1000);
 //            preparedStatement.executeUpdate();
-
 //            preparedStatement.close();
-            
 //            Statement statement = connection.createStatement();
 //            ResultSet resultSet = statement.executeQuery("select * from departments");
-            
             // untuk mengambil data perbaris
 //            while(resultSet.next()){ // DARI CLASS DEPARTEMENT
 //                Department dep = new Department(
@@ -72,17 +66,17 @@ public class AplikasiUtama {
 ////                        departmentId,departmentName,managerId));
 //                System.out.println(dep.toString());
 //            }
-
             // save nilai department
-            dao.save(new Department(3003, "Sistem Analis",1000,null));
-            dao.save(new Department(3004, "Sistem Analis",1000,null));
+            Department departmentBaru = dao.save(new Department(null, "Sistem Analis", 1000, null));
+            System.out.println(departmentBaru.toString());
+            dao.save(new Department(null, "Sistem Analis", 1000, null));
             //error karena duplikate
-            dao.save(new Department(3003, "Sistem Analis",1000,null));
+            //dao.update(new Department(3003, "Sistem Analis",1000,null));
             dao.delete(3003);
-            
+
             //untuk ambil nilainya
             List<Department> daftarDepartment = dao.findAll();
-            for(Department d : daftarDepartment){
+            for (Department d : daftarDepartment) {
                 System.out.println(d.toString());
             }
 //            
@@ -92,22 +86,22 @@ public class AplikasiUtama {
 
             connection.commit();
             connection.close();
-        }catch (SQLException sqle){
+        } catch (SQLException sqle) {
             System.err.println("tidak dapat koneksi ke database");
             sqle.printStackTrace();
-            try{
-                if (connection != null){
+            try {
+                if (connection != null) {
                     connection.rollback();
                 }
-            } catch (SQLException ex){
+            } catch (SQLException ex) {
                 ex.printStackTrace();
             }
         }
     }
-    
+
     public static void main(String[] args) {
         System.out.println("Halo ini aplikasi maven pertama");
-        
+
         koneksi();
     }
 }

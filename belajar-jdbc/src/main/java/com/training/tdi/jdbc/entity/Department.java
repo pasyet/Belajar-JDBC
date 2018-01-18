@@ -20,13 +20,11 @@ public class Department {
         this.locationId = locationId;
         this.managerId = managerId;
     }
-    
-    
+
     private Integer id;
     private String nama;
     private Integer locationId;
     private Integer managerId;
-    
 
     public Integer getId() {
         return id;
@@ -63,7 +61,7 @@ public class Department {
     @Override
     public String toString() {
         return String.format("{departemntId : %s, deparetmentName :%s, managerId :%s, locationId: %s }",
-                        id,nama,managerId,locationId
+                id, nama, managerId, locationId
         );
-    }  
+    }
 }
