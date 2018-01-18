@@ -5,6 +5,7 @@
  */
 package com.training.tdi.jdbc;
 
+
 import com.training.tdi.jdbc.dao.DepartmentDao;
 import com.training.tdi.jdbc.entity.Department;
 import java.sql.Connection;
@@ -14,8 +15,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 import java.util.Locale;
+import java.util.logging.Level;
 import javax.sql.DataSource;
 import org.apache.commons.dbcp2.BasicDataSource;
+
 
 /**
  *
@@ -29,10 +32,13 @@ public class AplikasiUtama {
         ds.setPassword("hr");
         ds.setUrl("jdbc:postgresql://localhost:5432/hr");
         ds.setDriverClassName("org.postgresql.Driver");
+        Connection connection = null;
         
         try{
             // membuka koneksi ke database
-            Connection connection = ds.getConnection();
+//            Connection connection = ds.getConnection();
+            connection = ds.getConnection();
+            connection.setAutoCommit(false);
             System.out.println("berhasil koneksi ke database");
             DepartmentDao dao = new DepartmentDao(connection);
 //            dao.save(new Department(2001,"Sistem Analis",1000,null));
@@ -68,7 +74,11 @@ public class AplikasiUtama {
 //            }
 
             // save nilai department
-            dao.save(new Department(2002, "Sistem Analis",1000,null));
+            dao.save(new Department(3003, "Sistem Analis",1000,null));
+            dao.save(new Department(3004, "Sistem Analis",1000,null));
+            //error karena duplikate
+            dao.save(new Department(3003, "Sistem Analis",1000,null));
+            dao.delete(3003);
             
             //untuk ambil nilainya
             List<Department> daftarDepartment = dao.findAll();
@@ -80,10 +90,18 @@ public class AplikasiUtama {
 //            resultSet.close();
 //            statement.close();
 
+            connection.commit();
             connection.close();
         }catch (SQLException sqle){
             System.err.println("tidak dapat koneksi ke database");
             sqle.printStackTrace();
+            try{
+                if (connection != null){
+                    connection.rollback();
+                }
+            } catch (SQLException ex){
+                ex.printStackTrace();
+            }
         }
     }
     

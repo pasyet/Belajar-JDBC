@@ -1,6 +1,7 @@
 com\training\tdi\jdbc\PreparedStatment.class
+com\training\tdi\jdbc\connection.class
+com\training\tdi\jdbc\dao\DepartmentDao.class
+com\training\tdi\jdbc\entity\Department.class
 com\training\tdi\jdbc\dao\dep.class
 com\training\tdi\jdbc\AplikasiUtama.class
-com\training\tdi\jdbc\dao\DepartmentDao.class
 com\training\tdi\jdbc\dao\SQLExeception.class
-com\training\tdi\jdbc\entity\Department.class
